@@ -43,9 +43,23 @@
   
   programs.btop.enable = true;
   programs.ripgrep.enable = true;
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+    enableFishIntegration = true;
+    options = [
+      "--cmd cd"
+    ];
+  };
   
   programs.zsh = {
     enable = true;
+    oh-my-zsh = {
+      enable = true;
+      theme = "jonathan";
+    };
   };
 
   programs.neovim = {
@@ -58,13 +72,12 @@
 
   programs.tmux = {
     enable = true;
-    prefix = "C- ";
+    prefix = "C-Space";
     mouse = true;
     clock24 = true;
-    shell = "\${pkgs.zsh}/bin/zsh";
+    shell = "${pkgs.zsh}/bin/zsh";
+    baseIndex = 1;
     extraConfig = "
-      set -g base-index 1
-      setw -g pane-base-index 1
       run ~/.config/.dotfiles/tmux/plugins/catppuccin/catppuccin.tmux
       bind C-c run \"tmux save-buffer - | xclip -i -sel clip\"
       bind C-v run \"tmux set-buffer $(xclip -o -sel clip); tmux paste-buffer\"
