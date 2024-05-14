@@ -24,6 +24,7 @@
   home.packages = with pkgs; [
     discord
     bitwarden
+    xclip
   ];
 
   # Let Home Manager install and manage itself.
@@ -42,12 +43,32 @@
   
   programs.btop.enable = true;
   programs.ripgrep.enable = true;
+  
+  programs.zsh = {
+    enable = true;
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    prefix = "C- ";
+    mouse = true;
+    clock24 = true;
+    shell = "\${pkgs.zsh}/bin/zsh";
+    extraConfig = "
+      set -g base-index 1
+      setw -g pane-base-index 1
+      run ~/.config/.dotfiles/tmux/plugins/catppuccin/catppuccin.tmux
+      bind C-c run \"tmux save-buffer - | xclip -i -sel clip\"
+      bind C-v run \"tmux set-buffer $(xclip -o -sel clip); tmux paste-buffer\"
+    ";
   };
 
 }
