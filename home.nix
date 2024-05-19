@@ -38,6 +38,9 @@
       init = {
         defaultBranch = "main";
       };
+      pull = {
+        rebase = "false";
+      };
     };
   };
   
@@ -58,7 +61,7 @@
     enable = true;
     oh-my-zsh = {
       enable = true;
-      theme = "jonathan";
+      theme = "nicoulaj";
     };
   };
 
