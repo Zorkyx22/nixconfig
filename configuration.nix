@@ -92,6 +92,8 @@
     git
     gcc
     docker
+    python3
+    pipx
   ];
 
 
