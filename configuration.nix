@@ -38,6 +38,10 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "gnome-remote-desktop";
+  services.xrdp.openFirewall = true;
+  
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -78,6 +82,7 @@
       firefox
     #  thunderbird
     ];
+    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys/sire_n1chaulas];
   };
 
   # Allow unfree packages
@@ -92,10 +97,13 @@
     git
     gcc
     docker
+    ffmpeg
     python3
     pipx
+    gnome.gnome-remote-desktop
   ];
 
+  environment.localBinInPath = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -124,4 +132,9 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+  }
 }
