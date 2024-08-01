@@ -15,7 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "Hive"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -24,7 +24,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
   # Set your time zone.
   time.timeZone = "America/Toronto";
 
@@ -32,20 +31,21 @@
   i18n.defaultLocale = "en_CA.UTF-8";
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  services.xrdp.enable = true;
-  services.xrdp.defaultWindowManager = "gnome-remote-desktop";
-  services.xrdp.openFirewall = true;
-  
-  # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    enable=true;
+   xkb = {
+      layout="us";
+      variant="";
+    };
+  };
+  services = {
+    displayManager.sddm = {
+      enable=true;
+      wayland= {
+        enable=true;
+      };
+    };
+    desktopManager.plasma6.enable=true;
   };
 
   # Enable CUPS to print documents.
@@ -75,18 +75,33 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sire_n1chaulas = {
-    isNormalUser = true;
-    description = "Nicolas";
-    extraGroups = [ "networkmanager" "wheel" "docker"];
+    isNormalUser=true;
+    description="Nicolas";
+    extraGroups=[ "networkmanager" "wheel" "docker"];
     packages = with pkgs; [
       firefox
     #  thunderbird
     ];
-    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys/sire_n1chaulas];
+    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys];
+  };
+
+  users.users.Laurence = {
+    isNormalUser=true;
+    description="Laurence";
+    extraGroups=[ "networkmanager" "wheel" "docker"];
+    packages = with pkgs; [
+      firefox
+    ];
+    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys];
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    firefox.enableGnomeExtensions=true;
+    allowUnfree=true;
+  };
+
+  services.gnome.gnome-browser-connector.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -100,6 +115,9 @@
     ffmpeg
     python3
     pipx
+    
+    gnome.gnome-session
+
     gnome.gnome-remote-desktop
   ];
 
@@ -136,5 +154,14 @@
     enable = true;
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
-  }
+  };
+  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.lidSwitch = "ignore";
+  services.logind.extraConfig = "HandleLidSwitch=ignore";
+  
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "startplasma-x11";
+  services.xrdp.openFirewall = true;
+  networking.firewall.allowedTCPPorts = [ 3389 ];
+
 }
