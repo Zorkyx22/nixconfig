@@ -25,6 +25,7 @@
     discord
     bitwarden
     xclip
+    wine
   ];
 
   # Let Home Manager install and manage itself.

@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./nvidia.nix
+      #./headscale.nix
     ];
 
   # Bootloader.
@@ -51,6 +52,16 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    useRoutingFeatures = "both";
+  };
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward"= 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+  };
+
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -74,25 +85,35 @@
   virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.sire_n1chaulas = {
+  users.users.sire_n1chaulas =
+    let
+      homeDir = "/home/sire_n1chaulas";
+      sshAuthLocation = homeDir+"/.ssh/authorized_keys";
+    in {
     isNormalUser=true;
     description="Nicolas";
+    home = homeDir;
     extraGroups=[ "networkmanager" "wheel" "docker"];
     packages = with pkgs; [
       firefox
     #  thunderbird
     ];
-    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys];
+    openssh.authorizedKeys.keyFiles=[sshAuthLocation];
   };
 
-  users.users.Laurence = {
+  users.users.Laurence = 
+    let
+      homeDir = "/home/Laurence";
+      sshAuthLocation = homeDir+"/.ssh/authorized_keys";
+    in {
     isNormalUser=true;
     description="Laurence";
+    home = homeDir;
     extraGroups=[ "networkmanager" "wheel" "docker"];
     packages = with pkgs; [
       firefox
     ];
-    openssh.authorizedKeys.keyFiles=[/etc/nixos/ssh/authorized_keys];
+    openssh.authorizedKeys.keyFiles=[sshAuthLocation];
   };
 
   # Allow unfree packages
@@ -152,7 +173,7 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    settings.PasswordAuthentication = true;
     settings.KbdInteractiveAuthentication = false;
   };
   services.logind.lidSwitchExternalPower = "ignore";
