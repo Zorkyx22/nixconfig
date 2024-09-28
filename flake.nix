@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Hive system configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-unstable";
@@ -16,13 +16,13 @@
     nixosConfigurations = {
       Hive = lib.nixosSystem {
         inherit system;
-	modules = [./configuration.nix];
+	modules = [./system/configuration.nix];
       };
     };
     homeConfigurations = {
       sire_n1chaulas = home-manager.lib.homeManagerConfiguration {
 	inherit pkgs;
-        modules = [ ./home.nix ];
+        modules = [ ./home/home.nix ];
       };
     };
   };
