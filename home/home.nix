@@ -26,6 +26,7 @@
     home-manager.enable = true;
     btop.enable = true;
     ripgrep.enable = true;
+    pandoc.enable = true;
   };
 
 }
