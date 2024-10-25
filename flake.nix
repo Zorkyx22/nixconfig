@@ -8,7 +8,7 @@
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
   };
   
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nix-minecraft, ... }@inputs:
   let 
     system = "x86_64-linux";
     lib = nixpkgs.lib;

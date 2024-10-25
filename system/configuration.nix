@@ -1,4 +1,4 @@
-{ config, pkgs,  ... }:
+{ config, pkgs, inputs,  ... }:
 
 {
   imports =
@@ -37,7 +37,7 @@
       sire_n1chaulas = {
         isNormalUser=true;
         description="Nicolas";
-        home = homeDir;
+        home = "/home/sire_n1chaulas";
         extraGroups=[ "networkmanager" "wheel" "docker"];
         packages = with pkgs; [
           ethtool
@@ -54,7 +54,6 @@
       git
       gcc
       docker
-      ffmpeg
       cloudflared
     ];
     localBinInPath = true;
