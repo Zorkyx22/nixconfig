@@ -15,7 +15,7 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     nixosConfigurations = {
-      Hive = lib.nixosSystem {
+      Hive = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs;};
 	modules = [./system/configuration.nix];

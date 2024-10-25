@@ -3,13 +3,12 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      inputs.nix-minecraft.nixosModules/minecraft-server
+      inputs.nix-minecraft.nixosModules/minecraft-servers
       ./hardware/hardware-configuration.nix
       ./hardware/nvidia.nix
       ./services/tailscale.nix
       ./services/kanata.nix
       ./services/cloudflared.nix
-      ./services/minecraft-server.nix
     ];
 
   # Bootloader.
