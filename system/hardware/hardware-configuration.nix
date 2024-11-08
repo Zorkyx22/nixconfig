@@ -24,6 +24,8 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
+  fileSystems."/Data" = { device = "/dev/sda"; };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/20b50f7a-4ebe-4c70-9cf3-ab0f1e800e32"; }
     ];

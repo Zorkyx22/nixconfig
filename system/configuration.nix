@@ -3,12 +3,14 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      inputs.nix-minecraft.nixosModules/minecraft-servers
+      inputs.nix-minecraft.nixosModules.minecraft-servers
       ./hardware/hardware-configuration.nix
       ./hardware/nvidia.nix
       ./services/tailscale.nix
       ./services/kanata.nix
       ./services/cloudflared.nix
+      ./services/minecraft-server.nix
+      ./services/samba.nix
     ];
 
   # Bootloader.
@@ -27,7 +29,7 @@
   networking = {
     hostName = "Hive";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 3389 ];
+    firewall.allowedTCPPorts = [ 3389 25565 ];
   };
 
   virtualisation.docker.enable = true;
@@ -54,6 +56,7 @@
       gcc
       docker
       cloudflared
+      kitty
     ];
     localBinInPath = true;
   };
